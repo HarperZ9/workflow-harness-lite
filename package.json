@@ -1,0 +1,31 @@
+{
+  "name": "workflow-harness-lite",
+  "version": "0.1.0",
+  "description": "Lightweight local workflow runner with parallel tasks and machine-readable reports.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Zain Dana Harper",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarperZ9/workflow-harness-lite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HarperZ9/workflow-harness-lite/issues"
+  },
+  "homepage": "https://github.com/HarperZ9/workflow-harness-lite#readme",
+  "keywords": [
+    "workflow",
+    "automation",
+    "cli",
+    "developer-tools"
+  ],
+  "bin": {
+    "workflow-harness-lite": "bin/workflow-harness-lite.js"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

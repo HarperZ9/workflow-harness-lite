@@ -7,7 +7,8 @@
 - [ ] Run `npm test`.
 - [ ] Run `npm pack --dry-run`.
 - [ ] Run `public-surface-sweeper . --summary`.
-- [ ] Create a signed `v0.1.0` tag after final review.
+- [ ] Create a signed `v0.1.0` tag when signing is configured, or an
+  annotated `v0.1.0` tag when it is not.
 - [ ] Publish to npm only after account ownership, 2FA, provenance, and access
   settings are confirmed.
 

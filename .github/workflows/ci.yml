@@ -12,5 +12,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - run: npm ci
-      - run: npm test
+      - name: Test
+        run: npm test
+      - name: Package dry run
+        run: npm pack --dry-run

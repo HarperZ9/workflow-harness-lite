@@ -11,6 +11,7 @@ function parseArgs(argv) {
     json: false,
     report: "",
     timeout: 15000,
+    outputLimit: 4000,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -28,9 +29,12 @@ function parseArgs(argv) {
     } else if (value === "--timeout" && argv[i + 1]) {
       options.timeout = Number.parseInt(argv[i + 1], 10);
       i += 1;
+    } else if (value === "--output-limit" && argv[i + 1]) {
+      options.outputLimit = Number.parseInt(argv[i + 1], 10);
+      i += 1;
     } else if (value === "-h" || value === "--help") {
-      console.log("workflow-harness-lite")
-      console.log("Usage: workflow-harness-lite [--config path] [--no-parallel] [--timeout ms] [--report path] [--json]");
+      console.log("workflow-harness-lite");
+      console.log("Usage: workflow-harness-lite [--config path] [--no-parallel] [--timeout ms] [--output-limit chars] [--report path] [--json]");
       process.exit(0);
     }
   }
@@ -62,6 +66,7 @@ async function main() {
   const report = await runWorkflow(config, {
     parallel: options.parallel,
     timeoutMs: options.timeout,
+    outputLimit: options.outputLimit,
   });
 
   if (options.report) {

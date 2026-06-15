@@ -30,3 +30,36 @@ test("runWorkflow marks fail", async () => {
   assert.equal(report.status, "fail");
   assert.equal(report.failed, 1);
 });
+
+test("runWorkflow redacts secret-shaped stdout", async () => {
+  const synthetic = "ghp_" + "A".repeat(36);
+  const report = await runWorkflow(
+    {
+      name: "redaction",
+      tasks: [
+        { name: "token", command: `node -e "console.log('token=${synthetic}')"` },
+      ],
+    },
+    { parallel: true, timeoutMs: 10000 },
+  );
+
+  assert.equal(report.status, "pass");
+  assert.match(report.tasks[0].stdout, /<redacted-secret>/);
+  assert.doesNotMatch(report.tasks[0].stdout, /ghp_/);
+});
+
+test("runWorkflow caps stdout previews", async () => {
+  const report = await runWorkflow(
+    {
+      name: "preview",
+      tasks: [
+        { name: "long", command: "node -e \"console.log('x'.repeat(200))\"" },
+      ],
+    },
+    { parallel: true, timeoutMs: 10000, outputLimit: 40 },
+  );
+
+  assert.equal(report.status, "pass");
+  assert.match(report.tasks[0].stdout, /\[truncated\]$/);
+  assert.ok(report.tasks[0].stdout.length <= 40);
+});

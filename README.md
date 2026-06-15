@@ -26,5 +26,7 @@ node bin/workflow-harness-lite.js --config workflow.json
 
 ## Report
 
-- JSON report includes status, duration, stdout preview, and command outcomes.
+- JSON report includes status, duration, redacted stdout/stderr previews, and
+  command outcomes.
+- Output previews are capped; use `--output-limit` to tune the character limit.
 - Exit code is non-zero when any task fails.

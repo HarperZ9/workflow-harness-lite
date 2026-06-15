@@ -2,11 +2,38 @@
 import { promisify } from "node:util";
 
 const exec = promisify(execCallback);
+const OUTPUT_PREVIEW_LIMIT = 4000;
+const SECRET_REPLACEMENTS = [
+  [/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g, "<redacted-secret>"],
+  [/\bAKIA[0-9A-Z]{16}\b/g, "<redacted-secret>"],
+  [/\bASIA[0-9A-Z]{16}\b/g, "<redacted-secret>"],
+  [/\bghp_[A-Za-z0-9_]{20,}\b/g, "<redacted-secret>"],
+  [/\bgithub_pat_[A-Za-z0-9_]{20,}\b/g, "<redacted-secret>"],
+  [/\bsk-[A-Za-z0-9_-]{20,}\b/g, "<redacted-secret>"],
+  [/\b(bearer|token|api[_-]?key|password|secret)\s*[:=]\s*\S+/gi, "$1=<redacted-secret>"],
+];
+
+export function sanitizeOutput(value, limit = OUTPUT_PREVIEW_LIMIT) {
+  const maxLength = Number.isFinite(limit) ? Math.max(0, limit) : OUTPUT_PREVIEW_LIMIT;
+  let text = String(value || "").replace(/\0/g, " ");
+  for (const [pattern, replacement] of SECRET_REPLACEMENTS) {
+    text = text.replace(pattern, replacement);
+  }
+  text = text.trim();
+  if (text.length <= maxLength) {
+    return text;
+  }
+  const suffix = "\n[truncated]";
+  return text.slice(0, Math.max(0, maxLength - suffix.length)).trimEnd() + suffix;
+}
 
 export async function runTask(task, options = {}) {
   const command = String(task?.command || "").trim();
   const cwd = task?.cwd;
   const timeout = Number.isFinite(options.timeoutMs) ? options.timeoutMs : 15000;
+  const outputLimit = Number.isFinite(options.outputLimit)
+    ? options.outputLimit
+    : OUTPUT_PREVIEW_LIMIT;
 
   if (!command) {
     return {
@@ -34,8 +61,8 @@ export async function runTask(task, options = {}) {
       status: "pass",
       code: 0,
       durationMs: Date.now() - start,
-      stdout: (result.stdout || "").trim(),
-      stderr: (result.stderr || "").trim(),
+      stdout: sanitizeOutput(result.stdout, outputLimit),
+      stderr: sanitizeOutput(result.stderr, outputLimit),
     };
   } catch (error) {
     return {
@@ -43,8 +70,8 @@ export async function runTask(task, options = {}) {
       status: "fail",
       code: error.code || 1,
       durationMs: Date.now() - start,
-      stdout: (error.stdout || "").trim(),
-      stderr: (error.stderr || "").trim() || String(error.message),
+      stdout: sanitizeOutput(error.stdout, outputLimit),
+      stderr: sanitizeOutput(error.stderr || error.message, outputLimit),
     };
   }
 }

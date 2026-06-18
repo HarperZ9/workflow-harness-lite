@@ -1,7 +1,7 @@
 {
   "name": "workflow-harness-lite",
   "version": "0.1.0",
-  "description": "Lightweight local workflow runner with parallel tasks and machine-readable reports.",
+  "description": "Lightweight local workflow runner with parallel task execution.",
   "type": "module",
   "license": "MIT",
   "author": "Zain Dana Harper",

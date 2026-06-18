@@ -17,9 +17,10 @@ Built with agentic assistance and manually reviewed for safety.
 
 ## Install
 
+No runtime dependencies. Use it from a clone:
+
 ```bash
-npm install
-npm test
+npm test                 # optional: runs the bundled tests
 node bin/workflow-harness-lite.js --help
 ```
 
@@ -28,6 +29,15 @@ node bin/workflow-harness-lite.js --help
 ```bash
 echo '{ "name": "local-checks", "tasks": [{"name":"ping","command":"node -e \"console.log(\\"ping\\")\""}] }' > workflow.json
 node bin/workflow-harness-lite.js --config workflow.json
+```
+
+See [USAGE.md](USAGE.md) for the full flag reference, the importable API
+(`runWorkflow`, `runTasks`, `runTask`, `sanitizeOutput`), and worked examples
+with expected output. A runnable end-to-end demo lives in
+[`examples/demo.mjs`](examples/demo.mjs):
+
+```bash
+node examples/demo.mjs
 ```
 
 ## Report

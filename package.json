@@ -1,6 +1,6 @@
 {
   "name": "workflow-harness-lite",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lightweight local workflow runner with parallel task execution.",
   "type": "module",
   "license": "MIT",
@@ -17,7 +17,9 @@
     "workflow",
     "automation",
     "cli",
-    "developer-tools"
+    "developer-tools",
+    "telos",
+    "receipt"
   ],
   "bin": {
     "workflow-harness-lite": "bin/workflow-harness-lite.js"

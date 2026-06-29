@@ -1,5 +1,40 @@
 # Workflow Harness Lite
 
+![Workflow Harness Lite hero](docs/brand/workflow-harness-lite-hero.png)
+
+> Run bounded local command workflows in parallel and emit compact reports or Telos receipts.
+
+Workflow Harness Lite is a dependency-free Node CLI for small automation runs. It
+accepts a JSON task config, runs independent commands in parallel, redacts output
+previews, and can write a bounded-run receipt for unattended agent workflows.
+
+## Why it matters
+
+Agent and release workflows need a local runner that terminates predictably and
+leaves a compact report. This repo gives developers a small harness for repeated
+checks without introducing a full CI system.
+
+## Try it
+
+```bash
+npm test
+node bin/workflow-harness-lite.js --help
+node examples/demo.mjs
+```
+
+## What to test first
+
+- Run `npm test`.
+- Run the demo and inspect the generated task report.
+- Generate a Telos receipt with `--telos-receipt receipt.json`.
+
+## Current status
+
+Node 18+ CLI and importable module with tests. It runs local commands only and
+keeps raw commands/output out of the interop receipt.
+
+## Existing technical notes
+
 > Lightweight local workflow runner with parallel task execution.
 
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)

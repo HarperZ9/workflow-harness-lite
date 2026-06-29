@@ -1,7 +1,7 @@
 {
   "name": "workflow-harness-lite",
   "version": "0.2.0",
-  "description": "Lightweight local workflow runner with parallel task execution.",
+  "description": "Run bounded local command workflows in parallel and emit compact reports or Telos receipts.",
   "type": "module",
   "license": "MIT",
   "author": "Zain Dana Harper",

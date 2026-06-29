@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Adds Project Telos bounded-run receipts with terminal status, command hashes,
+  output hashes, timeout bounds, and explicit privacy gates.
+- Exposes `--telos-receipt` in the CLI and `buildTelosReceipt()` in the API.
 - Redacts credential-shaped stdout/stderr before writing task reports.
 - Caps output previews and exposes `--output-limit` for CLI runs.
 

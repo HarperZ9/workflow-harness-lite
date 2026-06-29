@@ -1,7 +1,7 @@
 // Best-effort demo — not runtime-verified by author.
 //
 // Exercises the real workflow-harness-lite API end-to-end:
-//   runWorkflow, runTasks, runTask, sanitizeOutput
+//   runWorkflow, runTasks, runTask, sanitizeOutput, buildTelosReceipt
 //
 // Run from the repo root:
 //   node examples/demo.mjs
@@ -11,6 +11,7 @@ import {
   runTasks,
   runTask,
   sanitizeOutput,
+  buildTelosReceipt,
 } from "../src/workflow_harness_lite.js";
 
 // 1. A single task.
@@ -54,8 +55,21 @@ console.log(
   `skipped=${report.skipped}`,
 );
 
+const receipt = buildTelosReceipt(
+  report,
+  {
+    name: "demo-workflow",
+    tasks: [
+      { name: "ok", command: "node -e \"console.log('ok')\"" },
+      { name: "also-ok", command: "node --version" },
+    ],
+  },
+  { parallel: true, timeoutMs: 5000, outputLimit: 200 },
+);
+console.log("buildTelosReceipt ->", receipt.schema, receipt.terminal_status);
+
 // 4. Standalone output sanitisation (redaction + length cap).
-console.log("sanitizeOutput ->", sanitizeOutput("token=abcd1234efgh5678ijkl"));
+console.log("sanitizeOutput ->", sanitizeOutput("token=<demo>"));
 console.log(
   "sanitizeOutput (capped) ->",
   sanitizeOutput("x".repeat(100), 40),

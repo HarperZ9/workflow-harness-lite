@@ -1,6 +1,6 @@
 ﻿import { exec as execCallback } from "node:child_process";
 import { promisify } from "node:util";
-
+export { buildTelosReceipt } from "./telos_receipt.js";
 const exec = promisify(execCallback);
 const OUTPUT_PREVIEW_LIMIT = 4000;
 const SECRET_REPLACEMENTS = [

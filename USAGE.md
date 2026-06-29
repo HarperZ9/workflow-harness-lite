@@ -2,7 +2,8 @@
 
 `workflow-harness-lite` is a dependency-free Node.js (>=18) workflow runner. It
 reads a JSON config of named command tasks, runs them (in parallel by default),
-redacts credential-shaped output, and emits a compact pass/fail report.
+redacts credential-shaped output, emits a compact pass/fail report, and can
+write a Project Telos bounded-run receipt.
 
 This package is distributed as ES modules (`"type": "module"`).
 
@@ -22,7 +23,7 @@ There are no runtime dependencies to install.
 ## CLI
 
 ```text
-Usage: workflow-harness-lite [--config path] [--no-parallel] [--timeout ms] [--output-limit chars] [--report path] [--json]
+Usage: workflow-harness-lite [--config path] [--no-parallel] [--timeout ms] [--output-limit chars] [--report path] [--telos-receipt path] [--json]
 ```
 
 | Flag | Default | Effect |
@@ -32,6 +33,7 @@ Usage: workflow-harness-lite [--config path] [--no-parallel] [--timeout ms] [--o
 | `--timeout <ms>` | `15000` | Per-task timeout in milliseconds. |
 | `--output-limit <chars>` | `4000` | Max characters kept per stdout/stderr preview before `[truncated]`. |
 | `--report <path>` | none | Also write the full JSON report to this file (written even when tasks fail). |
+| `--telos-receipt <path>` | none | Also write a `project-telos.bounded-run-receipt/v1` artifact. |
 | `--json` | off | Print the full JSON report to stdout instead of the compact summary. |
 | `-h`, `--help` | — | Print usage and exit `0`. |
 
@@ -57,9 +59,10 @@ recorded as `skip` and do not fail the workflow.
 
 ## Importable API
 
-The module exports `runWorkflow`, `runTasks`, `runTask`, and `sanitizeOutput`.
-Import it by relative path from a clone (the package does not declare a `main`
-or `exports` entry, so import-by-package-name is not supported):
+The module exports `runWorkflow`, `runTasks`, `runTask`, `sanitizeOutput`, and
+`buildTelosReceipt`. Import it by relative path from a clone (the package does
+not declare a `main` or `exports` entry, so import-by-package-name is not
+supported):
 
 ```js
 import {
@@ -67,6 +70,7 @@ import {
   runTasks,
   runTask,
   sanitizeOutput,
+  buildTelosReceipt,
 } from "./src/workflow_harness_lite.js";
 ```
 
@@ -75,6 +79,7 @@ import {
 | `runWorkflow` | `runWorkflow(config, options?)` | `Promise<report>` — workflow summary plus per-task results. |
 | `runTasks` | `runTasks(tasks, options?)` | `Promise<taskResult[]>`. |
 | `runTask` | `runTask(task, options?)` | `Promise<taskResult>`. |
+| `buildTelosReceipt` | `buildTelosReceipt(report, config, options?)` | Telos bounded-run receipt without raw commands or raw output. |
 | `sanitizeOutput` | `sanitizeOutput(value, limit?)` | `string` — redacted, trimmed, length-capped text. |
 
 `options`: `{ parallel?: boolean, timeoutMs?: number (default 15000), outputLimit?: number (default 4000) }`.
@@ -185,11 +190,24 @@ Write the same report to a file (works even when the run fails):
 node bin/workflow-harness-lite.js --config workflow.json --report report.json
 ```
 
+Write a Telos bounded-run receipt as well:
+
+```bash
+node bin/workflow-harness-lite.js --config workflow.json --telos-receipt receipt.json
+```
+
+The receipt maps workflow `pass` to terminal status `ok` and failed workflows
+to `error`. It includes task names, task indexes, command hashes, optional cwd
+hashes, exit codes, durations, stdout/stderr hashes, timeout bounds, and
+privacy fields. It does not include raw commands or raw stdout/stderr; use the
+JSON report when a human needs the redacted previews.
+
 ### 4. Programmatic use + secret redaction
 
 ```js
 import {
   runWorkflow,
+  buildTelosReceipt,
   sanitizeOutput,
 } from "./src/workflow_harness_lite.js";
 
@@ -205,6 +223,7 @@ const report = await runWorkflow(
 );
 
 console.log(report.status, report.total, report.passed, report.skipped);
+console.log(buildTelosReceipt(report, { name: "demo", tasks: [] }).schema);
 console.log(sanitizeOutput("api_key=supersecret123"));
 ```
 
@@ -212,6 +231,7 @@ Expected output:
 
 ```text
 pass 2 1 1
+project-telos.bounded-run-receipt/v1
 api_key=<redacted-secret>
 ```
 

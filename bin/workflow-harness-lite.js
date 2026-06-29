@@ -1,8 +1,8 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import { runWorkflow } from "../src/workflow_harness_lite.js";
+import { buildTelosReceipt, runWorkflow } from "../src/workflow_harness_lite.js";
 
 function parseArgs(argv) {
   const options = {
@@ -10,6 +10,7 @@ function parseArgs(argv) {
     parallel: true,
     json: false,
     report: "",
+    telosReceipt: "",
     timeout: 15000,
     outputLimit: 4000,
   };
@@ -26,6 +27,9 @@ function parseArgs(argv) {
     } else if (value === "--report" && argv[i + 1]) {
       options.report = argv[i + 1];
       i += 1;
+    } else if (value === "--telos-receipt" && argv[i + 1]) {
+      options.telosReceipt = argv[i + 1];
+      i += 1;
     } else if (value === "--timeout" && argv[i + 1]) {
       options.timeout = Number.parseInt(argv[i + 1], 10);
       i += 1;
@@ -34,7 +38,9 @@ function parseArgs(argv) {
       i += 1;
     } else if (value === "-h" || value === "--help") {
       console.log("workflow-harness-lite");
-      console.log("Usage: workflow-harness-lite [--config path] [--no-parallel] [--timeout ms] [--output-limit chars] [--report path] [--json]");
+      console.log(
+        "Usage: workflow-harness-lite [--config path] [--no-parallel] [--timeout ms] [--output-limit chars] [--report path] [--telos-receipt path] [--json]",
+      );
       process.exit(0);
     }
   }
@@ -56,21 +62,27 @@ async function loadConfig(configPath) {
   }
 
   const text = await fs.readFile(path.resolve(configPath), "utf8");
-  return JSON.parse(text);
+  return JSON.parse(text.replace(/^\uFEFF/, ""));
 }
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const config = await loadConfig(options.config);
 
-  const report = await runWorkflow(config, {
+  const runOptions = {
     parallel: options.parallel,
     timeoutMs: options.timeout,
     outputLimit: options.outputLimit,
-  });
+  };
+  const report = await runWorkflow(config, runOptions);
 
   if (options.report) {
     await fs.writeFile(options.report, JSON.stringify(report, null, 2), "utf8");
+  }
+
+  if (options.telosReceipt) {
+    const receipt = buildTelosReceipt(report, config, runOptions);
+    await fs.writeFile(options.telosReceipt, JSON.stringify(receipt, null, 2), "utf8");
   }
 
   if (options.json) {

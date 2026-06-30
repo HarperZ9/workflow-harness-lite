@@ -35,7 +35,7 @@ Usage: workflow-harness-lite [--config path] [--no-parallel] [--timeout ms] [--o
 | `--report <path>` | none | Also write the full JSON report to this file (written even when tasks fail). |
 | `--telos-receipt <path>` | none | Also write a `project-telos.bounded-run-receipt/v1` artifact. |
 | `--json` | off | Print the full JSON report to stdout instead of the compact summary. |
-| `-h`, `--help` | — | Print usage and exit `0`. |
+| `-h`, `--help` | -- | Print usage and exit `0`. |
 
 The process exit code is `0` when the workflow status is `pass` and `1`
 otherwise (any task with status `fail`). Tasks with an empty command are
@@ -53,8 +53,8 @@ recorded as `skip` and do not fail the workflow.
 }
 ```
 
-- `name` (optional, string) — workflow label; defaults to `"workflow"`.
-- `tasks` (array) — each task has a `name`, a `command` string, and an optional
+- `name` (optional, string) -- workflow label; defaults to `"workflow"`.
+- `tasks` (array) -- each task has a `name`, a `command` string, and an optional
   `cwd`. A missing or empty `command` yields a `skip` result.
 
 ## Importable API
@@ -76,11 +76,11 @@ import {
 
 | Export | Signature | Returns |
 | --- | --- | --- |
-| `runWorkflow` | `runWorkflow(config, options?)` | `Promise<report>` — workflow summary plus per-task results. |
+| `runWorkflow` | `runWorkflow(config, options?)` | `Promise<report>` -- workflow summary plus per-task results. |
 | `runTasks` | `runTasks(tasks, options?)` | `Promise<taskResult[]>`. |
 | `runTask` | `runTask(task, options?)` | `Promise<taskResult>`. |
 | `buildTelosReceipt` | `buildTelosReceipt(report, config, options?)` | Telos bounded-run receipt without raw commands or raw output. |
-| `sanitizeOutput` | `sanitizeOutput(value, limit?)` | `string` — redacted, trimmed, length-capped text. |
+| `sanitizeOutput` | `sanitizeOutput(value, limit?)` | `string` -- redacted, trimmed, length-capped text. |
 
 `options`: `{ parallel?: boolean, timeoutMs?: number (default 15000), outputLimit?: number (default 4000) }`.
 
@@ -143,7 +143,7 @@ Exit code: `1`.
 node bin/workflow-harness-lite.js --config workflow.json --json
 ```
 
-Expected output (*illustrative* — `durationMs`/`generated` vary):
+Expected output (*illustrative* -- `durationMs`/`generated` vary):
 
 ```json
 {

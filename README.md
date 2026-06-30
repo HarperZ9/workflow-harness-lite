@@ -91,7 +91,7 @@ node examples/demo.mjs
 - Exit code is non-zero when any task fails.
 
 ---
-**Zain Dana Harper** — small tools with explicit edges.
+**Zain Dana Harper** -- small tools with explicit edges.
 [Portfolio](https://harperz9.github.io) · [HarperZ9](https://github.com/HarperZ9)
 <sub>Built with Claude Code; reviewed, tested, and owned by me.</sub>
 
@@ -103,3 +103,6 @@ Keep the public README, package metadata, and examples aligned with current beha
 npm install
 npm test
 ```
+
+See [AGENTS.md](AGENTS.md) for the repo-specific operating boundary and
+[CHANGELOG.md](CHANGELOG.md) for current delivery status.

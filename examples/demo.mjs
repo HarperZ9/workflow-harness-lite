@@ -1,4 +1,4 @@
-// Best-effort demo — not runtime-verified by author.
+// Best-effort demo -- not runtime-verified by author.
 //
 // Exercises the real workflow-harness-lite API end-to-end:
 //   runWorkflow, runTasks, runTask, sanitizeOutput, buildTelosReceipt

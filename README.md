@@ -1,10 +1,20 @@
-<p align="center"><img src=".github/assets/banner.png" alt="workflow-harness-lite" width="100%"></p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/HarperZ9/workflow-harness-lite/main/docs/art/hero-dark.svg">
+  <img src="https://raw.githubusercontent.com/HarperZ9/workflow-harness-lite/main/docs/art/hero-light.svg" alt="workflow-harness-lite: Run bounded local command workflows in parallel with compact reports. Bundles of fine lines carry the work through 4 stations, config, run, redact and receipt, along a sweeping path into a bright core." width="100%">
+</picture>
 
-# Workflow Harness Lite
+# workflow-harness-lite
 
-![Workflow Harness Lite hero](docs/brand/workflow-harness-lite-hero.png)
+Run bounded local command workflows in parallel with compact reports.
 
-> Run bounded local command workflows in parallel and emit compact reports or Telos receipts.
+```
+npm test
+```
+
+[![version: 0.1.0](https://img.shields.io/badge/version-0.1.0-e6e1d6?style=flat-square&labelColor=1a1712)](https://github.com/HarperZ9/workflow-harness-lite/releases/latest)
+[![CI](https://github.com/HarperZ9/workflow-harness-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/HarperZ9/workflow-harness-lite/actions/workflows/ci.yml)
+[![license](https://img.shields.io/badge/license-MIT-e6e1d6?style=flat-square&labelColor=1a1712)](https://github.com/HarperZ9/workflow-harness-lite/blob/main/LICENSE)
+![node 18+](https://img.shields.io/badge/node-18%2B-e6e1d6?style=flat-square&labelColor=1a1712)
 
 Workflow Harness Lite is a dependency-free Node CLI for small automation runs. It
 accepts a JSON task config, runs independent commands in parallel, redacts output

@@ -26,6 +26,55 @@ The [animated explainer](https://harperz9.github.io/repo-explainers/workflow-har
 walks through a four-task config run in parallel, a hung task stopped by the timeout, a token redacted from an output preview, and the bounded-run receipt that keeps hashes and no raw text. Every value on it is output from this repository. Its
 source is [docs/explainer/index.html](docs/explainer/index.html).
 
+## Watch
+
+No concept film fits this tool closely yet. The walkthrough below covers it in text, with real commands and output.
+
+Video walkthrough: coming with the next release.
+
+## Walkthrough
+
+Install it, run it once, then use the main feature. Each command below is real, and so is its output.
+
+1. **Get it.** Clone it. Node 18 or newer, no dependencies.
+
+   ```text
+   $ git clone https://github.com/HarperZ9/workflow-harness-lite && cd workflow-harness-lite
+   $ npm test
+   ```
+
+2. **First run: the demo.** Run a two-step workflow and build its receipt.
+
+   ```text
+   $ node examples/demo.mjs
+   runWorkflow -> status=pass total=2 passed=2 failed=0 skipped=0
+   buildTelosReceipt -> project-telos.bounded-run-receipt/v1 ok
+   ```
+
+3. **Run your own workflow.** A step that fails makes the run fail.
+
+   ```text
+   $ workflow-harness-lite --config wf.json
+   workflow=local-checks status=fail passed=2 failed=2
+   PASS node-version
+   PASS lint
+   FAIL flaky
+   FAIL hang
+   ```
+
+4. **Write a receipt.** Record the bounded run as a receipt.
+
+   ```text
+   $ workflow-harness-lite --config wf.json --telos-receipt receipt.json
+   schema           project-telos.bounded-run-receipt/v1
+   terminal_status  error
+   counts           total 4, passed 2, failed 2
+   flaky            command_hash sha256:8b0faa47b894b99e...  status fail  code 2
+                    stderr_hash  sha256:5e7b8623d7048b91...  raw_output_included false
+   privacy          raw_commands_included false, raw_output_included false, absolute_cwd_included false
+   receipt_hash     sha256:2ca9c5963543c0cc...
+   ```
+
 ## Why it matters
 
 Agent and release workflows need a local runner that terminates predictably and

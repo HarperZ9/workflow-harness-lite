@@ -121,6 +121,14 @@ footer.foot p{max-width:70ch;margin:0 0 .6rem}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
 }
+.film{margin:1rem 0 0;max-width:56rem}
+.film video{width:100%;height:auto;display:block;background:#000;border:1px solid var(--line)}
+.film figcaption{font-size:.9rem;color:var(--ink-soft);margin-top:.55rem;max-width:44rem;line-height:1.5}
+.soon{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);margin-top:.8rem}
+ol.walkthrough{padding-left:1.4rem;max-width:56rem;margin:1rem 0 0}
+ol.walkthrough li{margin:0 0 1.4rem}
+ol.walkthrough h3{margin:0 0 .3rem;font-size:1.05rem}
+ol.walkthrough p{margin:0 0 .3rem;max-width:44rem}
 
 /* generic scene kit: a pipeline strip, an input/output panel, a case picker, a table */
 .kscene{display:flex;flex-direction:column;gap:.8rem}
@@ -174,6 +182,12 @@ footer.foot p{max-width:70ch;margin:0 0 .6rem}
   <p class="src">Source: <a href="https://github.com/HarperZ9/workflow-harness-lite/blob/5886706509af45dcbee53489ea283ec8e5b40bf1/README.md">README.md</a> at 5886706 (version 0.2.0)</p>
 </section>
 
+<section class="block wrap" aria-labelledby="watch">
+  <h2 id="watch">Watch</h2>
+  <p class="measure">No concept film fits this tool closely yet. The walkthrough below covers it in text, with real commands and output.</p>
+  <p class="soon">Video walkthrough: coming with the next release.</p>
+</section>
+
 <section class="block wrap" aria-labelledby="how">
   <h2 id="how">How it works, one step at a time</h2>
   <p class="measure">Scroll, or use the step buttons. The panel runs a four-task config written for this page: two commands that pass, one that prints a token-shaped line and fails, and one that hangs. Every line is output from workflow-harness-lite at commit 5886706 under Node 25.</p>
@@ -224,15 +238,34 @@ footer.foot p{max-width:70ch;margin:0 0 .6rem}
   </div>
 </section>
 
-<section class="block wrap" aria-labelledby="try">
-  <h2 id="try">Try it</h2>
-  <div class="measure"><p>Clone and run (Node 18 or newer, no dependencies).</p></div>
+<section class="block wrap" aria-labelledby="walkthrough">
+  <h2 id="walkthrough">Walkthrough</h2>
+  <p class="measure">Install it, run it once, then use the main feature. Each command below is real, and so is its output.</p>
+  <ol class="walkthrough">
+    <li><h3>Get it</h3><p>Clone it. Node 18 or newer, no dependencies.</p>
 <pre class="cmd"><code>$ git clone https://github.com/HarperZ9/workflow-harness-lite && cd workflow-harness-lite
-$ npm test
-$ node examples/demo.mjs
-<span class="out">runWorkflow -> status=pass total=2 passed=2 failed=0 skipped=0
-buildTelosReceipt -> project-telos.bounded-run-receipt/v1 ok</span>
-$ node bin/workflow-harness-lite.js --config workflow.json --telos-receipt receipt.json</code></pre>
+$ npm test</code></pre></li>
+    <li><h3>First run: the demo</h3><p>Run a two-step workflow and build its receipt.</p>
+<pre class="cmd"><code>$ node examples/demo.mjs
+<span class="out">runWorkflow -&gt; status=pass total=2 passed=2 failed=0 skipped=0
+buildTelosReceipt -&gt; project-telos.bounded-run-receipt/v1 ok</span></code></pre></li>
+    <li><h3>Run your own workflow</h3><p>A step that fails makes the run fail.</p>
+<pre class="cmd"><code>$ workflow-harness-lite --config wf.json
+<span class="out">workflow=local-checks status=fail passed=2 failed=2
+PASS node-version
+PASS lint
+FAIL flaky
+FAIL hang</span></code></pre></li>
+    <li><h3>Write a receipt</h3><p>Record the bounded run as a receipt.</p>
+<pre class="cmd"><code>$ workflow-harness-lite --config wf.json --telos-receipt receipt.json
+<span class="out">schema           project-telos.bounded-run-receipt/v1
+terminal_status  error
+counts           total 4, passed 2, failed 2
+flaky            command_hash sha256:8b0faa47b894b99e...  status fail  code 2
+                 stderr_hash  sha256:5e7b8623d7048b91...  raw_output_included false
+privacy          raw_commands_included false, raw_output_included false, absolute_cwd_included false
+receipt_hash     sha256:2ca9c5963543c0cc...</span></code></pre></li>
+  </ol>
   <p class="src">Output from workflow-harness-lite at 5886706 on Windows with Node 25. Hashes in a receipt depend on the commands and their output, so yours will differ.</p>
 </section>
 

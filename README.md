@@ -20,6 +20,12 @@ Workflow Harness Lite is a dependency-free Node CLI for small automation runs. I
 accepts a JSON task config, runs independent commands in parallel, redacts output
 previews, and can write a bounded-run receipt for unattended agent workflows.
 
+## See it work, step by step
+
+The [animated explainer](https://harperz9.github.io/repo-explainers/workflow-harness-lite.html)
+walks through a four-task config run in parallel, a hung task stopped by the timeout, a token redacted from an output preview, and the bounded-run receipt that keeps hashes and no raw text. Every value on it is output from this repository. Its
+source is [docs/explainer/index.html](docs/explainer/index.html).
+
 ## Why it matters
 
 Agent and release workflows need a local runner that terminates predictably and

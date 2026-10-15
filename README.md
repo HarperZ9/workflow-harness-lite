@@ -26,12 +26,6 @@ The [animated explainer](https://harperz9.github.io/repo-explainers/workflow-har
 walks through a four-task config run in parallel, a hung task stopped by the timeout, a token redacted from an output preview, and the bounded-run receipt that keeps hashes and no raw text. Every value on it is output from this repository. Its
 source is [docs/explainer/index.html](docs/explainer/index.html).
 
-## Watch
-
-No concept film fits this tool closely yet. The walkthrough below covers it in text, with real commands and output.
-
-Video walkthrough: coming with the next release.
-
 ## Walkthrough
 
 Install it, run it once, then use the main feature. Each command below is real, and so is its output.

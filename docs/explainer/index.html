@@ -175,9 +175,9 @@ ol.walkthrough p{margin:0 0 .3rem;max-width:44rem}
   </div>
   <ul class="uses">
     <li><b>Parallel by default</b>Independent tasks run at once; <code>--no-parallel</code> runs them in order.</li>
-    <li><b>Guaranteed to end</b>Every task has a timeout, so a hung command cannot hold the run open.</li>
+    <li><b>Guaranteed to end</b>Every task has a timeout, so the run ends even when a command hangs.</li>
     <li><b>Redacted previews</b>Output previews are capped in length and secret-shaped values are replaced.</li>
-    <li><b>A receipt without the text</b>Commands and output appear as SHA-256 hashes, and the privacy fields say so.</li>
+    <li><b>A receipt of hashes</b>Commands and output appear as SHA-256 hashes, and the privacy fields say so.</li>
   </ul>
   <p class="src">Source: <a href="https://github.com/HarperZ9/workflow-harness-lite/blob/5886706509af45dcbee53489ea283ec8e5b40bf1/README.md">README.md</a> at 5886706 (version 0.2.0)</p>
 </section>
@@ -236,7 +236,7 @@ ol.walkthrough p{margin:0 0 .3rem;max-width:44rem}
   <h2 id="walkthrough">Walkthrough</h2>
   <p class="measure">Install it, run it once, then use the main feature. Each command below is real, and so is its output.</p>
   <ol class="walkthrough">
-    <li><h3>Get it</h3><p>Clone it. Node 18 or newer, no dependencies.</p>
+    <li><h3>Get it</h3><p>Clone it and run it with Node 18 or newer.</p>
 <pre class="cmd"><code>$ git clone https://github.com/HarperZ9/workflow-harness-lite && cd workflow-harness-lite
 $ npm test</code></pre></li>
     <li><h3>First run: the demo</h3><p>Run a two-step workflow and build its receipt.</p>
@@ -264,12 +264,12 @@ receipt_hash     sha256:2ca9c5963543c0cc...</span></code></pre></li>
 </section>
 
 <section class="block wrap" aria-labelledby="limits">
-  <h2 id="limits">What it does not do</h2>
+  <h2 id="limits">Limits</h2>
   <ul class="limits">
-    <li>It runs local commands only. It is not a CI system and does not sandbox what the commands do.</li>
-    <li>Redaction of previews is by shape. Output that holds a secret in another form is not caught.</li>
-    <li>The timeout is one value for the whole run, set with <code>--timeout</code>. A task cannot carry its own.</li>
-    <li>Every task's side-effect class is recorded as unknown. The harness does not inspect what a command changes.</li>
+    <li>It runs local commands as they are. Use a CI system or a sandbox when you need isolation.</li>
+    <li>Redaction of previews is by shape, so it catches secrets that look like secrets.</li>
+    <li>The timeout is one value for the whole run, set with <code>--timeout</code>, and every task shares it.</li>
+    <li>Every task's side-effect class is recorded as unknown, because the harness records what ran and leaves what changed to you.</li>
   </ul>
   <p class="src">Source: README.md at 5886706, "Current status" and "Report"; the receipt written for this page</p>
 </section>
@@ -279,7 +279,7 @@ receipt_hash     sha256:2ca9c5963543c0cc...</span></code></pre></li>
   <p class="measure">Answer each one in your head before you open it.</p>
   <details><summary>What stops the hang task?</summary><p>The per-task timeout. The task is killed and recorded as a failure, so the run ends.</p></details>
   <details><summary>What does the JSON report show for the flaky task's stderr?</summary><p>token=<redacted-secret>: the preview is redacted.</p></details>
-  <details><summary>What does the receipt keep about each command?</summary><p>Its hash, status, exit code, duration and output hashes, with no raw command or output.</p></details>
+  <details><summary>What does the receipt keep about each command?</summary><p>Its hash, status, exit code, duration and output hashes. The raw command and output stay out.</p></details>
 </section>
 </main>
 <footer class="foot wrap">
